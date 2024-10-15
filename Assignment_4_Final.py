@@ -5,7 +5,7 @@
 
 # ### Step 1: Import Libraries
 
-# In[1]:
+# In[ ]:
 
 
 import torch
@@ -29,7 +29,7 @@ import random
 
 # ### Step 2: Check for GPU and declare global variables
 
-# In[2]:
+# In[ ]:
 
 
 if torch.cuda.is_available():
@@ -39,7 +39,7 @@ else:
     print("GPU is not available")
 
 
-# In[3]:
+# In[ ]:
 
 
 #Some global variables
@@ -58,7 +58,7 @@ criterion = nn.CrossEntropyLoss()
 # 
 # I added some auxillary functions to make code flow appear neat
 
-# In[4]:
+# In[ ]:
 
 
 def plot_loss_curves(train_losses, val_losses):
@@ -93,7 +93,7 @@ def plot_confusion_matrix(true_labels, predictions):
     plt.show()
 
 
-# In[5]:
+# In[ ]:
 
 
 def calc_valid(test_loader, model, criterion):
@@ -122,7 +122,7 @@ def calc_valid(test_loader, model, criterion):
     return running_loss/len(testloader), 100 * correct / total
 
 
-# In[6]:
+# In[ ]:
 
 
 def train(model, criterion, optimizer, num_epochs, train_data, validloader):
@@ -197,7 +197,7 @@ def train(model, criterion, optimizer, num_epochs, train_data, validloader):
     print("********************** End Calculations **********************\n")
 
 
-# In[7]:
+# In[ ]:
 
 
 # We need images that did not get predicted, hence custom function to deal with this
@@ -264,7 +264,7 @@ def test_model(model, testloader, criterion):
 
 # ### Step 4: Write Auxillary Functions for Data preprocessing, model loading and Exploratory Data Analysis
 
-# In[8]:
+# In[ ]:
 
 
 #Modularize original code
@@ -323,7 +323,7 @@ def train_and_save_model(model, criterion, optimizer, num_epochs, train_data, va
     save_model(model, model_name)
 
 
-# In[9]:
+# In[ ]:
 
 
 # Exploratory Data Analysis (EDA) I copied from my my HW2, with some changes to extract images
@@ -414,7 +414,7 @@ def perform_eda(trainloader, validloader, testloader):
 # 
 # There is also class for Ensemble, but we will not use this in our experiments
 
-# In[10]:
+# In[ ]:
 
 
 class DenseNet(nn.Module):
@@ -432,7 +432,7 @@ class DenseNet(nn.Module):
         return self.model(x)
 
 
-# In[11]:
+# In[ ]:
 
 
 class VGG19(nn.Module):
@@ -451,7 +451,7 @@ class VGG19(nn.Module):
         return self.model(x)
 
 
-# In[12]:
+# In[ ]:
 
 
 class ResNet(nn.Module):
@@ -468,7 +468,7 @@ class ResNet(nn.Module):
         return self.model(x)
 
 
-# In[13]:
+# In[ ]:
 
 
 class MobileNetV2(nn.Module):
@@ -486,7 +486,7 @@ class MobileNetV2(nn.Module):
         return self.model(x)
 
 
-# In[14]:
+# In[ ]:
 
 
 '''
@@ -592,7 +592,7 @@ def run_all_ensembles():
 # 
 # 
 
-# In[15]:
+# In[ ]:
 
 
 #This function will fail if len(models) != 3
@@ -708,7 +708,7 @@ def compare_models(models, negative_examples, true_labels, focal_preds, batch_si
 # 
 # https://discuss.pytorch.org/t/simple-way-to-inverse-transform-normalization/4821/18
 
-# In[16]:
+# In[ ]:
 
 
 # Define the inverse transformation
@@ -777,7 +777,7 @@ def display_case_images(case_images):
 # https://discuss.pytorch.org/t/majority-voting/207260
 # https://www.kaggle.com/code/sharif485/pytorch-majority-voting-based-classification
 
-# In[17]:
+# In[ ]:
 
 
 #Simple Majoirity Voting
@@ -844,7 +844,7 @@ def run_all_ensembles():
 # ### Step 9: Data Loading and Performing EDA
 # 
 
-# In[18]:
+# In[ ]:
 
 
 # Load data
@@ -854,7 +854,7 @@ perform_eda(trainloader, validloader, testloader)
 
 # ### Step 10: Create the base models and train them
 
-# In[19]:
+# In[ ]:
 
 
 # Load the individual models
@@ -881,7 +881,7 @@ train_and_save_model(mobileNetV2, criterion, optimizer4, epoch_number, trainload
 # 
 # Note: We can load the models (in case jupyter crashes for whatever reason) 
 
-# In[20]:
+# In[ ]:
 
 
 denseNet = load_saved_model("denseNet")
@@ -907,7 +907,7 @@ average_loss_mobileNetV2, accuracy_mobileNetV2, _, _, wrong_examples_mobileNetV2
 # 
 # Section 5 -> use wrongly predicted examples of VGG19 as examples for testing
 
-# In[21]:
+# In[ ]:
 
 
 test_models_1 = [denseNet, resNet, mobileNetV2]
@@ -918,7 +918,7 @@ focal_model_name = ["VGG19"]
 statistics_df, case_images = compare_models(test_models_1, wrong_examples_vgg19, true_labels_vgg19, focal_vgg19)
 
 
-# In[22]:
+# In[ ]:
 
 
 print(statistics_df)
@@ -930,7 +930,7 @@ display_case_images(case_images)
 # 
 # This will determine which ensemble is the best (assuming we can choose 3)
 
-# In[23]:
+# In[ ]:
 
 
 run_all_ensembles()
@@ -940,7 +940,7 @@ run_all_ensembles()
 # 
 # We can use existing modular functions for the MNIST dataset, only data preprocessing changes
 
-# In[24]:
+# In[ ]:
 
 
 def add_noise(tensor):
@@ -1070,14 +1070,14 @@ def perform_eda_mnist(trainloader, validloader, testloader, class_names=None):
     display_images_per_class(testloader, name="Test set")
 
 
-# In[25]:
+# In[ ]:
 
 
 trainloader_mnist, validloader_mnist, testloader_mnist = prepare_data_mnist()
 perform_eda_mnist(trainloader_mnist, validloader_mnist, testloader_mnist)
 
 
-# In[26]:
+# In[ ]:
 
 
 # Load models for MNIST
@@ -1094,7 +1094,7 @@ optimizer3_MNIST = configure_optimizer(resNet_MNIST, lr = 0.0001)
 optimizer4_MNIST = configure_optimizer(mobileNetV2_MNIST, lr =0.0001)
 
 
-# In[27]:
+# In[ ]:
 
 
 # Train and save MNIST models
@@ -1104,7 +1104,7 @@ train_and_save_model(resNet_MNIST, criterion, optimizer3_MNIST, epoch_number, tr
 train_and_save_model(mobileNetV2_MNIST, criterion, optimizer4_MNIST, epoch_number, trainloader_mnist, validloader_mnist, "mobileNetV2_MNIST")
 
 
-# In[28]:
+# In[ ]:
 
 
 # Testing DenseNet on MNIST
@@ -1124,7 +1124,7 @@ print("Testing MobileNetV2_MNIST")
 average_loss_mobileNetV2_MNIST, accuracy_mobileNetV2_MNIST, _, _, wrong_examples_mobileNetV2_MNIST, true_labels_mobileNetV2_MNIST, focal_mobileNetV2_MNIST = test_model(mobileNetV2_MNIST, testloader_mnist, criterion)
 
 
-# In[29]:
+# In[ ]:
 
 
 def run_all_ensembles_mnist():
@@ -1142,7 +1142,7 @@ def run_all_ensembles_mnist():
     run_ensemble_experiment([vgg19_MNIST, resNet_MNIST, mobileNetV2_MNIST], testloader_mnist)
 
 
-# In[30]:
+# In[ ]:
 
 
 run_all_ensembles_mnist()
